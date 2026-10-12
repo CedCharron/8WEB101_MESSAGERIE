@@ -9,6 +9,39 @@ body{
     text-align: center;
 }
 
+.boite-menu-gauche{
+    background-color: white;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    margin-top: 10px;
+    margin-left: 10px;
+    height: 500px;
+}
+
+.boite-discussion{
+    background-color: white;
+    color: black;
+    padding: 1px;
+    border-radius: 10px;
+    width: 1000px;
+    margin-top: -542px;
+    margin-left: 400px;
+    height: 400px;
+}
+
+.boite-ecriture{
+    background-color: white;
+    color: black;
+    padding: 1px;
+    border-radius: 10px;
+    width: 1000px;
+    margin-top: 35px;
+    margin-left: 400px;
+    height: 100px;
+}
+
 
 input[type="button"]{
     background-color: blue;
