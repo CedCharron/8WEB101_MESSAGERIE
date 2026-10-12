@@ -5,7 +5,12 @@ body{
     margin: 0;
 }
 
-input [type="button"]{
+.page-index{
+    text-align: center;
+}
+
+
+input[type="button"]{
     background-color: blue;
     color: white;
 }
