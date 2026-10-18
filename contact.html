@@ -1,68 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 	<head>
 		<meta charset="utf-8">
 		<title>Contact</title>
 		<meta
 		name="Description"
 		content="Blabla">
+	
 		<link rel="stylesheet" href="style.css">
 
 	</head>
 
-	<body>
-		<h1>CONTACTS</h1>
-		<a href="conversation.html" target="_blank">Conversation</a>
-			<br><br>
 
-		<!--<h2>Rechercher un contact</h2>
-			<input type="contact" id="c" name="contact">
-			<input type="submit" value="Inviter">
-			<br>
-		
-		<h2>Liste de contact : </h2>
-			<ul>
-				<li>Camille Mousseau</li>
-				<li>Maxime Hebert-Levesque</li>
-				<li>Alexandre Lavoie</li>
-				<li>William Begin</li>
-			</ul>
 
-		<h2>Liste d'invitation recue :</h2>
-			<ul>
-				<li>Robert Charron</li>
-				<li>Francois Mousseau</li>
-			</ul>
+	<body class="page-contact">
 
-		<h2>Liste d'invitation envoyée : </h2>
-			<ul>
-				<li>Carole Fortin</li>
-				<li>Nancy Jobin</li>
-			</ul>
-		-->
-		<aside class="boite-menu-gauche">
-			<h2>Contacts</h2>
-			<ul>
-				<li>Camille Mousseau</li>
-				<li>Maxime Hebert-Levesque</li>
-				<li>Alexandre Lavoie</li>
-				<li>William Begin</li>
-			</ul>
-		</aside>
+		<main class="conteneur-contacts">
 
-		<aside class="boite-discussion">
-			<h2>Discussion</h2>
-			<div class="message">
-				<p><strong>Camille Mousseau:</strong> Bonjour !</p>
-			</div>
-			<div class="message">
-				<p><strong>Vous:</strong> Salut !</p>
-			</div>
-		</aside>
+    		<aside class="liste-utilisateurs"> 
+				<h2>Mes contacts</h2>
+        			<!-- Liste des utilisateurs -->
+		 			<ul>
+						<li>
+							<button type="button" id="contact-alexandre">Alexandre Lavoie</button>
+						</li>
+						<li>
+							<button type="button" id="contact-camille">Camille Mousseau</button>
+						</li>
+						<li>
+							<button type="button" id="contact-maxime">Maxime Hebert-Levesque</button>
+						</li>
+						<li>
+							<button type="button" id="contact-william">William Begin</button>
+						</li>
+		 			</ul>
+   		 	</aside>
 
-		<aside class="boite-ecriture">
-		</aside>
+    		<section class="discussion-privee">
+				<h2 id="titre-discussion">Sélectionnez un contact pour commencer la discussion</h2>
+    		</section>
+			<script src="contact.js"></script>
+
+		</main>
 	</body>
+
 </html>
 
 

@@ -9,16 +9,27 @@ body{
     text-align: center;
 }
 
-.boite-menu-gauche{
-    background-color: white;
+.conteneur-contacts{
+display: flex;
+color: black;
+gap: 20px;
+}
+.liste-utilisateurs {
     color: black;
-    padding: 20px;
+    background-color: white;
     border-radius: 10px;
     width: 300px;
-    margin-top: 10px;
-    margin-left: 10px;
-    height: 500px;
+    padding: 0px;
 }
+
+.discussion-privee{
+    flex: 1;
+    background-color: white;
+    color: black;
+    min-height: 400px;
+    border-radius: 10px;
+}
+
 
 .boite-discussion{
     background-color: white;
