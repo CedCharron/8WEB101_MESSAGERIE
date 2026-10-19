@@ -9,6 +9,14 @@ body{
     text-align: center;
 }
 
+.en-tete{
+    background-color: white;
+    color: black;
+    padding: 10px;
+    text-align: Left;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
 .conteneur-contacts{
 display: flex;
 color: black;
@@ -19,7 +27,23 @@ gap: 20px;
     background-color: white;
     border-radius: 10px;
     width: 300px;
-    padding: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.liste-utilisateurs ul {
+    list-style: none;
+    padding: 0;
+}
+
+.bouton-contact {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
 }
 
 .discussion-privee{
