@@ -54,7 +54,37 @@ gap: 20px;
     border-radius: 10px;
 }
 
+.bulle-message-envoye {
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: fit-content;
+    margin-left: auto;
+}
 
+.bulle-message-recu {
+    background-color: rgb(161, 160, 160);
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: fit-content;
+}
+
+#message-input {
+    width: 90%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+#discussion{
+    padding: 15px;
+    height: 300px;
+    overflow-y: auto;
+}
 .boite-discussion{
     background-color: white;
     color: black;

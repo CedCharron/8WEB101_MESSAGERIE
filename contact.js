@@ -33,4 +33,12 @@ contacts.forEach(function(contact) {
     });
 });
 
+const messageInput = document.querySelector("#message-input");
+const envoyerMessageButton = document.querySelector("#envoyer-message");
+envoyerMessageButton.addEventListener("click", function() {
+    const texteMessage = messageInput.value.trim();
+    console.log("Message envoyé : " + texteMessage + " (Contact ID : " + contactSelectionneID + ")");
+})
+
+
 

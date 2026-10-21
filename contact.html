@@ -21,20 +21,32 @@
 				<a href="conversation.html">Messagerie</a>
 				<a href="parametre.html">Paramètres</a>
 				<a href="index.html">Déconnexion</a>
-			</nav></p>
+			</nav>
 		</header>	
 
-
 		<main class="conteneur-contacts">
+
+			<!-- Affichage des contacts -->
     		<aside class="liste-utilisateurs"> 
 				<h2>Mes contacts</h2>
         			
 				<ul id="liste-contacts"></ul>
    		 	</aside>
 
+			<!-- Affichage de la discussion privée -->
     		<section class="discussion-privee">
 				<h2 id="titre-discussion">Sélectionnez un contact pour commencer la discussion</h2>
-    		</section>
+				<div id="discussion">
+					<p class="bulle-message-envoye">Salut, comment ça va ?</p>
+					<p class="bulle-message-recu">Ça va, merci ! Et toi ?</p>
+				</div>
+    		
+				<input type="text" id="message-input" placeholder="Écrire un message...">
+				<button id="envoyer-message">Envoyer</button>
+			</section>
+
+
+
 			<script src="contact.js"></script>
 
 		</main>
