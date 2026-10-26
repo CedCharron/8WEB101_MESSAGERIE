@@ -1,12 +1,10 @@
+/*-------------------Commun--------------------*/
+
 body{
     background-color:black;
     font-family: Arial, Helvetica, sans-serif;
     color:white;
     margin: 0;
-}
-
-.page-index{
-    text-align: center;
 }
 
 .en-tete{
@@ -17,11 +15,20 @@ body{
     margin-bottom: 1px;
     /*border-radius: 10px;*/
 }
+
+/*-------------------Index--------------------*/
+.page-index{
+    text-align: center;
+}
+
+/*-------------------Contact--------------------*/
+
 .conteneur-contacts{
 display: flex;
 color: black;
 gap: 1px;
 flex : 1;
+min-height: 0;
 }
 
 .page-contact {
@@ -123,6 +130,40 @@ flex : 1;
     margin-left: 400px;
     /*height: 100px;*/
 
+}
+
+/*-------------------Message--------------------*/
+.page-message {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.conteneur-messages{
+display: flex;
+color: black;
+gap: 1px;
+flex : 1;
+min-height: 0;
+}
+
+.liste-salon {
+    color: black;
+    background-color: white;
+    /*border-radius: 10px;*/
+    width: 300px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.discussion-publique{
+    flex: 1;
+    background-color: white;
+    color: black;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    /*border-radius: 10px;*/
 }
 
 
