@@ -1,6 +1,19 @@
 
 //-----------INDEX.HTML----------------
 const courriel = document.querySelector("#email");
+const motDePasse=document.querySelector("#motPasse")
+const boutonInscription = document.querySelector("#bouton-inscription")
+const boutonConnexion=document.querySelector("#bouton-connexion")
+
+boutonInscription.addEventListener("click", function() {
+    const email=courriel.value.trim();
+    const password=motDePasse.value;
+
+    console.log("Demande d'inscription : ", email);
+});
+
+
+/*
 
 // Écouteur d'événement pour la validation du courriel
 courriel.addEventListener("input", function(event) {
@@ -31,4 +44,4 @@ motDePasse.addEventListener("input", function(event) {
         motDePasse.style.borderColor = "red";
     }
     console.log("Mot de passe : ", valeur)
-})
+})*/
