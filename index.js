@@ -1,17 +1,33 @@
 
-//-----------INDEX.HTML----------------
-const courriel = document.querySelector("#email");
-const motDePasse=document.querySelector("#motPasse")
-const boutonInscription = document.querySelector("#bouton-inscription")
+//-----------INDEX----------------
+const courrielConnexion = document.querySelector("#email");
+const motDePasseConnexion=document.querySelector("#motPasse")
 const boutonConnexion=document.querySelector("#bouton-connexion")
 
-boutonInscription.addEventListener("click", function() {
-    const email=courriel.value.trim();
-    const password=motDePasse.value;
+//Connexion a la messagerie
+boutonConnexion.addEventListener("click",async function(){
+    const email = courrielConnexion.value.trim();
+    const password = motDePasseConnexion.value;
+    
+    //Validation des champs vide
+    if (email==="" || password===""){
+        alert("Veuillez remplir tout les champs.")
+        return;
+    }
 
-    console.log("Demande d'inscription : ", email);
+    //Verification dans supabase
+    const { data, error } = await Auth.signIn(email, password);
+
+    if(error){
+        console.error("Erreur de connexion : ", error.message);
+        alert("Connexion impossible, veuillez verifier vos identifiants.")
+        return;
+    }
+
+    // Connexion réussie
+    console.log("Connexion réussie !");
+    window.location.href = "conversation.html";
 });
-
 
 /*
 

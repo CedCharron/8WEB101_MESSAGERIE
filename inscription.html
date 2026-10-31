@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Messagerie</title>
+		<meta
+		name="Description"
+		content="Blabla">
+		<link rel="stylesheet" href="style.css">
+
+	</head>
+
+	<body class="page-index">	
+		<h1>Inscription : </h1>
+        
+        <!--Case EMAIL--> 
+		<label for="email-inscription"> Email:</label>
+			<br>
+		<input type="email" id="email-inscription" placeholder="Adresse courriel">
+			<br>
+		
+        <!--'Case Mot de passe--> 
+            <label for="mot-passe-inscription"> Mot de Passe:</label>
+			<br>
+		<input type="password" id="mot-passe-inscription" placeholder="Mot de passe">
+			<br>
+		
+        <!--Case utilisateur--> 
+        <label for="nom-utilisateur-inscription"> Nom d'utilisateur:</label>
+			<br>
+		<input type="text" id="nom-utilisateur-inscription" placeholder="Nom d'utilisateur">
+			<br><br>
+		
+        <!--Bouton de creation de compte-->
+        <input type="button" id="bouton-inscription" value="Inscription">
+			<br><br>
+		<a href="index.html">Retourner à la page de connexion</a>	
+
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>	
+		<script src="spclient.js"></script>
+		<script src="auth.js"></script>
+		<script src="inscription.js"></script>
+	</body>
+
+</html>
+

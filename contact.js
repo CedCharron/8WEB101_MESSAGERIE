@@ -1,4 +1,4 @@
-//-----------Contact.HTML----------------
+//-----------Contact----------------
 
 const titre= document.querySelector("#titre-discussion");
 const utilisateurs=[{"id": 101, "nom": "Camille Mousseau"}, {"id": 102, "nom": "Maxime Hebert-Levesque"}, {"id": 103, "nom": "William Begin"}, {"id": 104, "nom": "Alexandre Lavoie"}];
