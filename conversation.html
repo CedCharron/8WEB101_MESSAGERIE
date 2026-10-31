@@ -22,42 +22,37 @@
 		</header>	
 
 		<main class="conteneur-messages">
-			<aside class="liste-salon">
+			<section class="liste-salon">
 				<h2>Liste des salons </h2>
 
-			</aside>
+				<!-- Zone d'écriture du message -->
+				<div class="zoneCreationSalon">
+					<input type="text" id="nouveau-salon-input" placeholder="Nouveau salon...">
+					<button id="creer-salon">Créer</button>
+				</div>
 
-			<aside class="discussion-publique">
+				<ul id="liste-salons"></ul>
+			</section>
 
+			<!-- Affichage de la discussion publique -->
+    		<section class="discussion-publique">
+				<h2 id="titre-discussion">Sélectionnez un salon pour commencer la discussion</h2>
+				<div id="discussion">
+				</div>
+    		
+				<!-- Zone d'écriture du message -->
+				<div class="zoneEcritureMessage">
+					<input type="text" id="message-input" placeholder="Écrire un message...">
+					<button id="envoyer-message">Envoyer</button>
+				</div>
+			</section>
 			</aside>
 
 		</main>
-		
-<!--			<h2>Mes conversation</h2>
+	<script src="conversation.js"></script>
 
-		<ul>
-			<li>Killer Duck's🦆</li>
-			<li>Robot inc.🤖</li>
-			<li>Tokebak automation🛺</li>
-			<li>Volley-Ball🏐</li>
-		</ul>
-
-		<h2>Liste des messages : </h2>
 		
-		<label for="msg">Message :</label> 
-			<br>
-		<textarea id="msg" name="msg" rows="4" cols="40"></textarea>
-			<br>
-		<input type="submit" value="Envoyer">
-		/*<aside class="boite-menu-gauche">
-			<h1>Mes conversations</h1>
-			<ul>
-				<li>Killer Duck's🦆</li>
-				<li>Robot inc.🤖</li>
-				<li>Tokebak automation🛺</li>
-				<li>Volley-Ball🏐</li>
-			</ul>
-		</aside>
+<!--			
 
 		<aside class="boite-discussion">
 			<div class="message">

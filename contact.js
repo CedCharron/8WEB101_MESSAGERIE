@@ -13,6 +13,7 @@ const conversations = {
     ]
 };
 
+//Trier les utilisateurs par ordre alphabétique
 utilisateurs.sort((a,b)=>a.nom.localeCompare(b.nom));
 
 
@@ -29,9 +30,6 @@ for (let i = 0; i < utilisateurs.length; i++) {
 const contacts = document.querySelectorAll(".bouton-contact"); // Sélection de tous les boutons de contact
 
 //Affichage des message par utilisateur 
-
-
-
 let contactSelectionneID = null; // Variable pour stocker le contact sélectionné
 
 // Action à faire lorsqu'un contact est sélectionné

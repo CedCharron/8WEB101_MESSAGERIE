@@ -147,6 +147,7 @@ flex : 1;
 min-height: 0;
 }
 
+
 .liste-salon {
     color: black;
     background-color: white;
@@ -154,6 +155,27 @@ min-height: 0;
     width: 300px;
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.liste-salon ul {
+    list-style: none;
+    padding: 0;
+}
+
+.zoneCreationSalon{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bouton-salon {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
 }
 
 .discussion-publique{
