@@ -1,63 +1,67 @@
 //-----------Contact----------------
 
-const titre= document.querySelector("#titre-discussion");
-const utilisateurs=[{"id": 101, "nom": "Camille Mousseau"}, {"id": 102, "nom": "Maxime Hebert-Levesque"}, {"id": 103, "nom": "William Begin"}, {"id": 104, "nom": "Alexandre Lavoie"}];
-const listeContacts = document.querySelector("#liste-contacts");
-const conversations = {
-    101: [
-        { texte: "Salut Camille !", expediteur: "moi" },
-        { texte: "Comment ça va ?", expediteur: "contact" }
-    ],
-    104: [
-        {texte:"Bonjour !", expediteur:"contact"}
-    ]
-};
-
-//Trier les utilisateurs par ordre alphabétique
-utilisateurs.sort((a,b)=>a.nom.localeCompare(b.nom));
-
-
-// Création des boutons pour chaque utilisateur
-for (let i = 0; i < utilisateurs.length; i++) {
-    const nouvelElement = document.createElement("li"); // Création d'un élément de liste
-    const nouveauBouton = document.createElement("button"); // Création d'un bouton
-    nouveauBouton.classList.add("bouton-contact"); // Ajout de la classe CSS au bouton
-    nouveauBouton.dataset.id=utilisateurs[i].id; // Attribution de l'ID d'un utilisateur au bouton  
-    nouveauBouton.textContent = utilisateurs[i].nom; //Attribution du nom de l'utilisateur au bouton
-    nouvelElement.appendChild(nouveauBouton); // Ajout du bouton à l'élément de liste
-    listeContacts.appendChild(nouvelElement); // Ajout de l'élément de liste à la liste des contacts
-}
-const contacts = document.querySelectorAll(".bouton-contact"); // Sélection de tous les boutons de contact
+const titre = document.querySelector("#titre-discussion");
+const listeContacts = document.querySelector("#conteneur-contacts");
+const discussion = document.querySelector("#discussion");
 
 //Affichage des message par utilisateur 
 let contactSelectionneID = null; // Variable pour stocker le contact sélectionné
 
-// Action à faire lorsqu'un contact est sélectionné
-contacts.forEach(function(contact) {
-    contact.addEventListener("click", function() {
-        titre.textContent = "Discussion avec " + this.textContent;
-        contactSelectionneID = this.dataset.id; // Affectation avec l'ID du contact selectionné
-        console.log("Contact sélectionné : " + this.textContent + " (ID : " + contactSelectionneID + ")");
-        discussion.textContent="";
-        const messages = conversations[contactSelectionneID] || [];
-        for (let i = 0; i < messages.length; i++) {
-            const bulleMessageHistorique = document.createElement("p");
-            bulleMessageHistorique.textContent=messages[i].texte;
-            if(messages[i].expediteur==="moi"){            
-                bulleMessageHistorique.classList.add("bulle-message-envoye");
-                discussion.appendChild(bulleMessageHistorique);
-            }
-            else{
-                bulleMessageHistorique.classList.add("bulle-message-recu");
-                discussion.appendChild(bulleMessageHistorique);
-            }
-        }
-    });
-});
+async function chargerContacts() {
+    const { user, error: authError } = await Auth.getUser();
+
+    if (authError || !user) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    const { data: profils, error } = await Data.fetchProfiles();
+
+    if (error) {
+        console.error("Erreur de chargement des contacts :", error);
+        return;
+    }
+
+    listeContacts.replaceChildren();
+
+    for (const profil of profils) {
+        // Ne pas s'afficher soi-même dans ses contacts
+        if (profil.id === user.id) continue;
+
+        const bouton = document.createElement("button");
+        bouton.type = "button";
+        bouton.classList.add("bouton-contact");
+        bouton.textContent = profil.username;
+        bouton.dataset.id = profil.id;
+
+        bouton.addEventListener("click", () => {
+            contactSelectionneID = profil.id;
+
+            titre.textContent = "Discussion avec " + profil.username;
+
+            discussion.replaceChildren();
+
+            console.log(
+                "Contact sélectionné :",
+                profil.username,
+                profil.id
+            );
+        });
+
+        listeContacts.appendChild(bouton);
+    }
+
+    if (listeContacts.children.length === 0) {
+    const message = document.createElement("p");
+    message.textContent = "Aucun contact disponible";
+    listeContacts.appendChild(message);
+}
+}
+
+chargerContacts();
 
 const messageInput = document.querySelector("#message-input");
 const envoyerMessageButton = document.querySelector("#envoyer-message");
-const discussion=document.querySelector("#discussion")
 
 //Envoyer message en cliquant ENTER
 messageInput.addEventListener("keydown", function(event) {
@@ -66,23 +70,77 @@ messageInput.addEventListener("keydown", function(event) {
     }
 });
 
-//Fonction pour envoyer message 
-envoyerMessageButton.addEventListener("click", function() {
+envoyerMessageButton.addEventListener("click", async function() {
     const texteMessage = messageInput.value.trim();
-    const nouvelleBulleMessage=document.createElement("p");
-    nouvelleBulleMessage.classList.add("bulle-message-envoye");
-    if(texteMessage === ""||contactSelectionneID === null) {
+
+    if (texteMessage === "" || contactSelectionneID === null) {
         return;
     }
-    nouvelleBulleMessage.textContent=texteMessage;
-    discussion.appendChild(nouvelleBulleMessage);
-    discussion.scrollTop=discussion.scrollHeight;
-    console.log("Message envoyé : " + texteMessage + " (Contact ID : " + contactSelectionneID + ")");
-    if (conversations[contactSelectionneID] === undefined) {
-    conversations[contactSelectionneID] = [];
+
+    // Récupérer l'utilisateur connecté
+    const { user, error: authError } = await Auth.getUser();
+
+    if (authError || !user) {
+        console.error("Utilisateur non connecté");
+        return;
     }
-    /*conversations[contactSelectionneID].texte.push({
-        texte:texteMessage,
-        expediteur:"moi");  
-    messageInput.value=""; */
-})
+
+    // Rechercher une conversation existante
+    const { data: conversation, error: rechercheErreur } =
+        await Data.fetchPrivateConversation(user.id, contactSelectionneID);
+
+    if (rechercheErreur) {
+        console.error("Erreur de recherche :", rechercheErreur);
+        return;
+    }
+
+    let conversationId = conversation?.id;
+
+    // Créer la conversation uniquement si elle n'existe pas
+    if (!conversationId) {
+        const { data: nouvelleConversation, error: creationErreur } =
+            await Data.createPrivateConversation(user.id, contactSelectionneID);
+
+        if (creationErreur) {
+            // Un autre utilisateur a peut-être créé la conversation
+            // au même moment : la rechercher de nouveau.
+            if (creationErreur.code === "23505") {
+                const { data: existante, error: nouvelleRechercheErreur } =
+                    await Data.fetchPrivateConversation(user.id, contactSelectionneID);
+
+                if (nouvelleRechercheErreur || !existante) {
+                    console.error("Conversation introuvable :", nouvelleRechercheErreur);
+                    return;
+                }
+
+                conversationId = existante.id;
+            } else {
+                console.error("Erreur de création :", creationErreur);
+                return;
+            }
+        } else {
+            conversationId = nouvelleConversation.id;
+        }
+    }
+
+    // Enregistrer le message dans Supabase
+    const { error: envoiErreur } =
+        await Data.sendPrivateMessage(conversationId, texteMessage);
+
+    if (envoiErreur) {
+        console.error("Erreur d'envoi :", envoiErreur);
+        return;
+    }
+
+    // Afficher la bulle seulement après un envoi réussi
+    const nouvelleBulleMessage = document.createElement("p");
+    nouvelleBulleMessage.classList.add("bulle-message-envoye");
+    nouvelleBulleMessage.textContent = texteMessage;
+
+    discussion.appendChild(nouvelleBulleMessage);
+    discussion.scrollTop = discussion.scrollHeight;
+
+    messageInput.value = "";
+
+    console.log("Message privé enregistré dans Supabase !");
+});
