@@ -1,5 +1,19 @@
 //-----------Contact----------------
 
+//S'assurer d'avoir une session connecte pour avoir acces 
+async function verifierConnexion() {
+    const { user, error } = await Auth.getUser();
+
+    if (error || user === null) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    console.log("Utilisateur connecté :", user.id);
+}
+
+verifierConnexion();
+
 const titre = document.querySelector("#titre-discussion");
 const listeContacts = document.querySelector("#liste-contacts");
 const discussion = document.querySelector("#discussion");
@@ -193,4 +207,16 @@ envoyerMessageButton.addEventListener("click", async function() {
     console.log("Message privé enregistré dans Supabase !");
 });
 
+//Deconnexion 
+boutonDeconnexion.addEventListener("click", async function(event){
+    event.preventDefault();
 
+    const {error} = await Auth.signOut();
+
+    if(error){
+        console.error("Erreur de deconnexion : ", error.message);
+        return;
+    }
+
+    window.location.href="index.html";
+});
