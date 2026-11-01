@@ -1,29 +1,34 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>Messagerie</title>
-		<meta
-		name="Description"
-		content="Blabla">
-		<link rel="stylesheet" href="style.css">
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Paramètres - Fil-Rouge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-	</head>
+<body class="page-parametres">
 
-	<body>
-		<h1>Parametre de la messagerie : </h1>
-		<a href="contact.html" target="_blank">Contact</a>
+    <h1>Paramètres de la messagerie</h1>
 
-		<h2>Information du compte : </h2>
-		<ul>
-			<li>Nom : Cedric Fortin Charron </li>
-			<li>Annee de naissance : 1993</li>
-		</ul>
+    <a href="contact.html">Retour aux contacts</a>
 
-		<h2>Action : </h2>
-			<a href="index.html" target="_blank">Deconnexion</a>	</body>
-			<a href="index.html" target="_blank">Suprimmer le compte</a>	</body>
+    <h2>Informations du compte</h2>
 
-	</body>
+    <ul>
+        <li>Pseudonyme : <span id="nom-utilisateur"></span></li>
+        <li>Courriel : <span id="courriel-utilisateur"></span></li>
+    </ul>
+
+    <h2>Actions</h2>
+
+    <button id="bouton-deconnexion">Déconnexion</button>
+	<button id="bouton-suppression-compte">Supprimer le compte</button>
+    <!-- Suppression à développer -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="spclient.js"></script>
+    <script src="auth.js"></script>
+    <script src="parametre.js"></script>
+
+</body>
 </html>
-
