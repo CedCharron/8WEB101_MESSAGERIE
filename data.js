@@ -1,3 +1,5 @@
+//-------DATA-------------
+
 //Objet reliees au stockage
 const Data={
 
@@ -65,13 +67,6 @@ const Data={
         .select("id, username")
         .order("username");
     },
-
-    async fetchProfiles() {
-    return await supabaseClient
-        .from("profiles")
-        .select("id, username")
-        .order("username");
-},
 
     async fetchPrivateConversation(userA, userB) {
         return await supabaseClient

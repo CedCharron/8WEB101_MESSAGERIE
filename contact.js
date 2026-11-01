@@ -1,7 +1,7 @@
 //-----------Contact----------------
 
 const titre = document.querySelector("#titre-discussion");
-const listeContacts = document.querySelector("#conteneur-contacts");
+const listeContacts = document.querySelector("#liste-contacts");
 const discussion = document.querySelector("#discussion");
 
 //Affichage des message par utilisateur 
@@ -17,7 +17,10 @@ async function chargerContacts() {
 
     const { data: profils, error } = await Data.fetchProfiles();
 
-    if (error) {
+console.log("Profils récupérés :", profils);
+console.log("Erreur Supabase :", error);
+
+if (error) {
         console.error("Erreur de chargement des contacts :", error);
         return;
     }
@@ -144,3 +147,5 @@ envoyerMessageButton.addEventListener("click", async function() {
 
     console.log("Message privé enregistré dans Supabase !");
 });
+
+
