@@ -7,6 +7,21 @@ const discussion = document.querySelector("#discussion");
 //Affichage des message par utilisateur 
 let contactSelectionneID = null; // Variable pour stocker le contact sélectionné
 
+function afficherMessagePrive(message, monId) {
+    const bulle = document.createElement("p");
+
+    bulle.textContent = message.content;
+
+    if (message.expediteur_id === monId) {
+        bulle.classList.add("bulle-message-envoye");
+    } else {
+        bulle.classList.add("bulle-message-recu");
+    }
+
+    discussion.appendChild(bulle);
+    discussion.scrollTop = discussion.scrollHeight;
+}
+
 async function chargerContacts() {
     const { user, error: authError } = await Auth.getUser();
 
@@ -17,10 +32,10 @@ async function chargerContacts() {
 
     const { data: profils, error } = await Data.fetchProfiles();
 
-console.log("Profils récupérés :", profils);
-console.log("Erreur Supabase :", error);
+    console.log("Profils récupérés :", profils);
+    console.log("Erreur Supabase :", error);
 
-if (error) {
+    if (error) {
         console.error("Erreur de chargement des contacts :", error);
         return;
     }
@@ -37,19 +52,49 @@ if (error) {
         bouton.textContent = profil.username;
         bouton.dataset.id = profil.id;
 
-        bouton.addEventListener("click", () => {
-            contactSelectionneID = profil.id;
+bouton.addEventListener("click", async () => {
+    contactSelectionneID = profil.id;
 
-            titre.textContent = "Discussion avec " + profil.username;
+    titre.textContent = "Discussion avec " + profil.username;
+    discussion.replaceChildren();
 
-            discussion.replaceChildren();
+    // 1. Chercher la conversation existante
+    const { data: conversation, error: erreurConversation } =
+        await Data.fetchPrivateConversation(user.id, profil.id);
 
-            console.log(
-                "Contact sélectionné :",
-                profil.username,
-                profil.id
-            );
-        });
+    if (erreurConversation) {
+        console.error("Erreur de recherche :", erreurConversation);
+        return;
+    }
+
+    // Aucune conversation : aucun historique
+    if (!conversation) {
+        return;
+    }
+
+    // 2. Récupérer les messages de la conversation
+    const { data: messages, error: erreurMessages } =
+        await Data.fetchPrivateMessages(conversation.id);
+
+    if (erreurMessages) {
+        console.error("Erreur de chargement :", erreurMessages);
+        return;
+    }
+
+    // Éviter d'afficher les messages d'un autre contact
+    if (contactSelectionneID !== profil.id) {
+        return;
+    }
+
+    // 3. Afficher chaque message
+    discussion.replaceChildren();
+
+    for (const message of messages) {
+        afficherMessagePrive(message, user.id);
+    }
+
+    console.log("Historique chargé :", messages.length, "messages");
+});
 
         listeContacts.appendChild(bouton);
     }
@@ -58,7 +103,7 @@ if (error) {
     const message = document.createElement("p");
     message.textContent = "Aucun contact disponible";
     listeContacts.appendChild(message);
-}
+    }
 }
 
 chargerContacts();

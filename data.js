@@ -98,5 +98,13 @@ const Data={
             content: content
         });
     },
+
+    async fetchPrivateMessages(conversationId) {
+    return await supabaseClient
+        .from("messages_prives")
+        .select("id, content, expediteur_id, created_at")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
+},
 };
 
