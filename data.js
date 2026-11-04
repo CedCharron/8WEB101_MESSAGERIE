@@ -11,6 +11,7 @@ const Data={
             .order("name");
     },
 
+    //Créer un nouveau salon
     async createChannel(name){
         return await supabaseClient
         .from("channels")
@@ -61,6 +62,7 @@ const Data={
         return () => supabaseClient.removeChannel(subscription);
     },
 
+    // Récupérer les profils d'utilisateurs
     async fetchProfiles() {
     return await supabaseClient
         .from("profiles")
@@ -68,6 +70,7 @@ const Data={
         .order("username");
     },
 
+    //Récuperer la conversation entre deux utilisateurs 
     async fetchPrivateConversation(userA, userB) {
         return await supabaseClient
             .from("conversation_privee")
@@ -79,6 +82,7 @@ const Data={
             .maybeSingle();
     },
 
+    //Créer un conversation privée entre deux utilisateurs 
     async createPrivateConversation(userA, userB) {
     return await supabaseClient
         .from("conversation_privee")
@@ -90,6 +94,7 @@ const Data={
         .single();
     },
 
+    //Envoyer un message privé à un utilisateur
     async sendPrivateMessage(conversationId, content) {
     return await supabaseClient
         .from("messages_prives")
@@ -99,12 +104,13 @@ const Data={
         });
     },
 
+    //Récuperer les messages privés d'une conversation
     async fetchPrivateMessages(conversationId) {
     return await supabaseClient
         .from("messages_prives")
         .select("id, content, expediteur_id, created_at")
         .eq("conversation_id", conversationId)
         .order("created_at", { ascending: true });
-},
+    },
 };
 

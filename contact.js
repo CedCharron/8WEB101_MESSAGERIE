@@ -1,6 +1,4 @@
-//-----------Contact----------------
-
-//S'assurer d'avoir une session connecte pour avoir acces 
+//S'assurer d'avoir une session connectée pour avoir accès 
 async function verifierConnexion() {
     const { user, error } = await Auth.getUser();
 
@@ -12,15 +10,18 @@ async function verifierConnexion() {
     console.log("Utilisateur connecté :", user.id);
 }
 
-verifierConnexion();
+verifierConnexion(); 
 
+//Déclaration des querySelector pour la messagerie
 const titre = document.querySelector("#titre-discussion");
 const listeContacts = document.querySelector("#liste-contacts");
 const discussion = document.querySelector("#discussion");
+const boutonDeconnexion = document.querySelector("#bouton-deconnexion");
 
-//Affichage des message par utilisateur 
+//Aucun contact sélectionné au chargement de la page
 let contactSelectionneID = null; // Variable pour stocker le contact sélectionné
 
+//Créer une bulle de message privé
 function afficherMessagePrive(message, monId) {
     const bulle = document.createElement("p");
 
@@ -36,15 +37,17 @@ function afficherMessagePrive(message, monId) {
     discussion.scrollTop = discussion.scrollHeight;
 }
 
+// Charger les profils et configuer l'ouverture des conversations
 async function chargerContacts() {
     const { user, error: authError } = await Auth.getUser();
 
+    // Vérifier si l'utilisateur est connecté
     if (authError || !user) {
         window.location.href = "index.html";
         return;
     }
 
-    const { data: profils, error } = await Data.fetchProfiles();
+    const { data: profils, error } = await Data.fetchProfiles(); // Récupérer tous les profils d'utilisateurs
 
     console.log("Profils récupérés :", profils);
     console.log("Erreur Supabase :", error);
@@ -54,8 +57,10 @@ async function chargerContacts() {
         return;
     }
 
+    //Effacter les contacts précédents pour éviter les doublons
     listeContacts.replaceChildren();
 
+    //Parcourir les profils récupérés
     for (const profil of profils) {
         // Ne pas s'afficher soi-même dans ses contacts
         if (profil.id === user.id) continue;
@@ -66,58 +71,62 @@ async function chargerContacts() {
         bouton.textContent = profil.username;
         bouton.dataset.id = profil.id;
 
-bouton.addEventListener("click", async () => {
-    contactSelectionneID = profil.id;
 
-    titre.textContent = "Discussion avec " + profil.username;
-    discussion.replaceChildren();
+        bouton.addEventListener("click", async () => {
+            contactSelectionneID = profil.id;
 
-    // 1. Chercher la conversation existante
-    const { data: conversation, error: erreurConversation } =
-        await Data.fetchPrivateConversation(user.id, profil.id);
+            titre.textContent = "Discussion avec " + profil.username;
+            discussion.replaceChildren();
 
-    if (erreurConversation) {
-        console.error("Erreur de recherche :", erreurConversation);
-        return;
+            // 1. Chercher la conversation existante
+            const { data: conversation, error: erreurConversation } =
+                await Data.fetchPrivateConversation(user.id, profil.id);
+
+            if (erreurConversation) {
+                console.error("Erreur de recherche :", erreurConversation);
+                return;
+            }
+
+            // Aucune conversation : aucun historique
+            if (!conversation) {
+                return;
+            }
+
+            // 2. Récupérer les messages de la conversation
+            const { data: messages, error: erreurMessages } =
+                await Data.fetchPrivateMessages(conversation.id);
+
+            if (erreurMessages) {
+                console.error("Erreur de chargement :", erreurMessages);
+                return;
+            }
+
+            // Éviter d'afficher les messages d'un autre contact
+            if (contactSelectionneID !== profil.id) {
+                return;
+            }
+
+            // 3. Afficher chaque message
+            discussion.replaceChildren();
+
+            for (const message of messages) {
+                afficherMessagePrive(message, user.id);
+        }
+
+        console.log("Historique chargé :", messages.length, "messages");
+    });
+
+    //Ajouter le bouton dans la liste HTML
+    const elementListe = document.createElement("li");
+    elementListe.appendChild(bouton);
+    listeContacts.appendChild(elementListe);
     }
 
-    // Aucune conversation : aucun historique
-    if (!conversation) {
-        return;
-    }
-
-    // 2. Récupérer les messages de la conversation
-    const { data: messages, error: erreurMessages } =
-        await Data.fetchPrivateMessages(conversation.id);
-
-    if (erreurMessages) {
-        console.error("Erreur de chargement :", erreurMessages);
-        return;
-    }
-
-    // Éviter d'afficher les messages d'un autre contact
-    if (contactSelectionneID !== profil.id) {
-        return;
-    }
-
-    // 3. Afficher chaque message
-    discussion.replaceChildren();
-
-    for (const message of messages) {
-        afficherMessagePrive(message, user.id);
-    }
-
-    console.log("Historique chargé :", messages.length, "messages");
-});
-
-        listeContacts.appendChild(bouton);
-    }
-
-    if (listeContacts.children.length === 0) {
-    const message = document.createElement("p");
-    message.textContent = "Aucun contact disponible";
-    listeContacts.appendChild(message);
-    }
+        if (listeContacts.children.length === 0) {
+        const message = document.createElement("p");
+        message.textContent = "Aucun contact disponible";
+        listeContacts.appendChild(message);
+        }
 }
 
 chargerContacts();
@@ -132,6 +141,7 @@ messageInput.addEventListener("keydown", function(event) {
     }
 });
 
+//Envoyer message privé en recherchant ou créant la conversation 
 envoyerMessageButton.addEventListener("click", async function() {
     const texteMessage = messageInput.value.trim();
 
@@ -207,7 +217,7 @@ envoyerMessageButton.addEventListener("click", async function() {
     console.log("Message privé enregistré dans Supabase !");
 });
 
-//Deconnexion 
+//Deconnexion d'un utilisateur et retour à la page de connexion
 boutonDeconnexion.addEventListener("click", async function(event){
     event.preventDefault();
 

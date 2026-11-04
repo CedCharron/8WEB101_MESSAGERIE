@@ -1,4 +1,4 @@
-//S'assurer d'avoir une session connecte pour avoir acces 
+//Fonction pour s'assurer d'avoir une session connectée pour avoir accès 
 async function verifierConnexion() {
     const { user, error } = await Auth.getUser();
 
@@ -12,7 +12,7 @@ async function verifierConnexion() {
 
 verifierConnexion();
 
-
+//Déclaration des éléments HTML pour la messagerie
 const titre= document.querySelector("#titre-discussion");
 const nomNouveauSalon = document.querySelector("#nouveau-salon-input") //Valeur d'entree dans boite creation de salon
 const boutonCreerSalon=document.querySelector("#creer-salon") //Bouton pour creation nouveau salon 
@@ -22,6 +22,7 @@ const messageInput = document.querySelector("#message-input");
 const envoyerMessageButton = document.querySelector("#envoyer-message");
 const boutonDeconnexion =document.querySelector("#bouton-deconnexion");
 
+// Récupérer les salons depuis Supabase et générer leurs boutons dans la liste
 async function chargerSalons() {
     const { data, error } = await Data.fetchChannels();
 
@@ -32,25 +33,23 @@ async function chargerSalons() {
 
     // Création des boutons pour chaque salon
     for (let i = 0; i < data.length; i++) {
-        const nouvelElement = document.createElement("li"); // Création d'un élément de liste
-        const nouveauBouton = document.createElement("button"); // Création d'un bouton
-        nouveauBouton.classList.add("bouton-salon"); // Ajout de la classe CSS au bouton
-        nouveauBouton.dataset.id=data[i].id; // Attribution de l'ID d'un salon au bouton  
-        nouveauBouton.textContent = data[i].name; //Attribution du nom du salon au bouton
-        nouvelElement.appendChild(nouveauBouton); // Ajout du bouton à l'élément de liste
-        listeSalons.appendChild(nouvelElement); // Ajout de l'élément de liste à la liste des salons
+        const nouvelElement = document.createElement("li");
+        const nouveauBouton = document.createElement("button"); 
+        nouveauBouton.classList.add("bouton-salon"); 
+        nouveauBouton.dataset.id=data[i].id;
+        nouveauBouton.textContent = data[i].name; 
+        nouvelElement.appendChild(nouveauBouton); 
+        listeSalons.appendChild(nouvelElement); 
     }
-
-    console.log("Salons récupérés :", data);
 }
 
 chargerSalons();
 
 
-//Attribution à zéro de la mémoire du salon 
+//Aucun salon sélectionné au chargement de la page  
 let salonSelectionneID = null;
 
-//Se desabonner de l'ecoute du salon 
+// Conserver la fonction de désabonnement au salon actuellement écouté
 let seDesabonnerMessages = null;
 
 //Envoyer message en cliquant ENTER
@@ -62,8 +61,8 @@ messageInput.addEventListener("keydown", function(event) {
 
 //Fonction pour envoyer message 
 envoyerMessageButton.addEventListener("click", async function() {
-    const texteMessage = messageInput.value.trim(); //Ajuster le texte des message 
-    const nouvelleBulleMessage=document.createElement("p"); //Creation d'une nouvelle bulle 
+    const texteMessage = messageInput.value.trim(); 
+    const nouvelleBulleMessage=document.createElement("p"); 
     nouvelleBulleMessage.classList.add("bulle-message-envoye");
     if(texteMessage === ""||salonSelectionneID === null) {
         return;
@@ -72,6 +71,7 @@ envoyerMessageButton.addEventListener("click", async function() {
     // Récupérer l'utilisateur connecté
     const { user, error: authError } = await Auth.getUser();
 
+    // Vérifier si l'utilisateur est connecté
     if (authError || user === null) {
         console.error("Utilisateur non connecté");
         return;
@@ -87,6 +87,7 @@ envoyerMessageButton.addEventListener("click", async function() {
         username
     );
 
+    // Vérifier si l'envoi a réussi, si non afficher l'erreur
     if (error) {
         console.error("Erreur d'envoi :", error.message);
         return;
@@ -95,7 +96,7 @@ envoyerMessageButton.addEventListener("click", async function() {
 
     console.log("Message envoyé : " + texteMessage + " (Contact ID : " + salonSelectionneID + ")");
 
-    messageInput.value=""; //Effacer les caractères après création du salon 
+    messageInput.value=""; //Effacer les caractères après envoi du message 
 });
 
 //Creer salon en cliquant ENTER
@@ -105,9 +106,10 @@ nomNouveauSalon.addEventListener("keydown", function(event) {
     }
 });
 
-//Action de click sur un salon 
+//Sélection d'un salon et affichage de ses messages 
 listeSalons.addEventListener("click", async function(event) {
     const boutonClique = event.target.closest(".bouton-salon");
+
 
     if (boutonClique === null) {
         return;
@@ -117,6 +119,7 @@ listeSalons.addEventListener("click", async function(event) {
     titre.textContent = "Discussion avec " + boutonClique.textContent;
     salonSelectionneID = boutonClique.dataset.id;
     
+    // Récupérer les messages du salon sélectionné
     const { data, error } = await Data.fetchMessages(salonSelectionneID);
     const { user } = await Auth.getUser(); //Recuperer l'ID de l'utilisateur
 
@@ -125,27 +128,30 @@ listeSalons.addEventListener("click", async function(event) {
         return;
     }   
 
+
     if (user === null) {
     console.error("Utilisateur non connecté");
     window.location.href = "index.html";
     return;
     }
 
-    console.log("Message récupérés : ", data);
-
-
     discussion.textContent="";
         
     const messages = data.reverse();
 
+    // Afficher les messages dans la discussion
     for (let i = 0; i < messages.length; i++) {
         const bulleMessageHistorique = document.createElement("p");
         bulleMessageHistorique.textContent=messages[i].content;
+        
+        //Si le message est envoyé par l'utilisateur connecté, on l'affiche dans la bulle de message envoyé
         if(messages[i].user_id === user.id){            
             bulleMessageHistorique.classList.add("bulle-message-envoye");
             discussion.appendChild(bulleMessageHistorique);
         }
         
+
+        //Si le message est recu, on l'affiche dans la bulle de message recu
         else {
             bulleMessageHistorique.classList.add("bulle-message-recu");
             discussion.appendChild(bulleMessageHistorique);
@@ -167,6 +173,7 @@ listeSalons.addEventListener("click", async function(event) {
 
         nouvelleBulle.textContent = nouveauMessage.content;
 
+            // Vérifier si le message est envoyé par l'utilisateur connecté
             if (nouveauMessage.user_id === user.id) {
                 nouvelleBulle.classList.add("bulle-message-envoye");
             } else {
@@ -203,15 +210,15 @@ boutonCreerSalon.addEventListener("click",async function(){
     //Creation du bouton pour le salon 
     const nouvelElement = document.createElement("li");
     const nouveauBouton = document.createElement("button");
-    nouveauBouton.classList.add("bouton-salon"); // Ajout de la classe CSS au bouton
-    nouveauBouton.dataset.id=data.id; // Attribution de l'ID d'un salon au bouton  
-    nouveauBouton.textContent = data.name; //Attribution du nom du salon au bouton
-    nouvelElement.appendChild(nouveauBouton); // Ajout du bouton à l'élément de liste
-    listeSalons.appendChild(nouvelElement); // Ajout de l'élément de liste à la liste des salons
+    nouveauBouton.classList.add("bouton-salon");
+    nouveauBouton.dataset.id=data.id; 
+    nouveauBouton.textContent = data.name;
+    nouvelElement.appendChild(nouveauBouton); 
+    listeSalons.appendChild(nouvelElement);
 
 })
 
-//Deconnexion 
+//Deconnexion d'un utilisateur et retour à la page de connexion
 boutonDeconnexion.addEventListener("click", async function(event){
     event.preventDefault();
 

@@ -4,14 +4,14 @@
 		<meta charset="utf-8">
 		<title>Messagerie</title>
 		<meta
-		name="Description"
-		content="Blabla">
+		name="Description">
 		<link rel="stylesheet" href="style.css">
 
 	</head>
 
 	<body class="page-message">
 		
+		<!--Menu en en-tête-->
 		<header class="en-tete">
 			<h2>Salon de discussion</h2>
 			<nav>
@@ -25,16 +25,17 @@
 			<section class="liste-salon">
 				<h2>Liste des salons </h2>
 
-				<!-- Zone d'écriture du message -->
+				<!-- Zone de création de nouveau salon -->
 				<div class="zoneCreationSalon">
 					<input type="text" id="nouveau-salon-input" placeholder="Nouveau salon...">
 					<button id="creer-salon">Créer</button>
 				</div>
 
+				<!--Création de liste de salon-->
 				<ul id="liste-salons"></ul>
 			</section>
 
-			<!-- Affichage de la discussion publique -->
+			<!-- Affichage du salon selectionné -->
     		<section class="discussion-publique">
 				<h2 id="titre-discussion">Sélectionnez un salon pour commencer la discussion</h2>
 				<div id="discussion">
@@ -48,20 +49,13 @@
 			</section>
 
 		</main>
-<!-- Bibliothèque Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- Connexion à Supabase -->
-<script src="spclient.js"></script>
-
-<!-- Authentification -->
-<script src="auth.js"></script>
-
-<!-- Requêtes à la base de données -->
-<script src="data.js"></script>
-
-<!-- Fonctionnement de la page Contacts -->
-<script src="conversation.js"></script>
+		
+		<!--Scripts-->
+		<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+		<script src="spclient.js"></script>
+		<script src="auth.js"></script>
+		<script src="data.js"></script>
+		<script src="conversation.js"></script>
 
 	</body>
 </html>
