@@ -20,29 +20,29 @@ Le projet vise à mettre en pratique les concepts de développement Web, la prog
 
 | Utilisation | Technologie |
 |---|---|
-| HTML5 | Structure des pages Web |
-| CSS3 | Présentation et mise en page |
-| JavaScript | Interactions et logique de l'application |
-| Supabase Auth | Gestion des comptes et des sessions |
-| PostgreSQL / Supabase | Stockage des données |
-| Supabase Realtime | Actualisation des salons publics |
-| Git et GitHub | Gestion du code source |
-| GitHub Pages | Hébergement de l'interface Web |
+| Interface | Javascript, HTML, CSS |
+| Authentification et base de données | Supabase (Postgre SQL) |
+| Bibliothèque côté client  | supabase-js |
+
 
 ## 4. Architecture de l'application
 
-L'application repose sur une séparation des responsabilités entre plusieurs fichiers JavaScript.
-
-| Fichier | Responsabilité |
-|---|---|
-| `spclient.js` | Initialisation du client Supabase |
-| `auth.js` | Inscription, connexion et déconnexion |
-| `data.js` | Communication avec la base de données |
-| `conversation.js` | Gestion des salons publics |
-| `contact.js` | Gestion des conversations privées |
-| `parametre.js` | Affichage des paramètres utilisateurs |
-
-Les pages HTML utilisent ces fichiers pour gérer les interactions et actualiser leur contenu.
+8WEB101_MESSAGERIE/
+│
+├── index.html          Page de connexion et d'inscription
+├── conversation.html   Salons de discussion publics
+├── contact.html        Liste de contact et messagerie privée
+├── parametre.html      Paramètres du compte et action possible pour le compte
+├── style.css           Mise en page de l'application
+│
+├── spclient.js          Initialisation du client Supabase
+├── auth.js              Authentification des utilisateurs
+├── data.js              Accès à la base de données
+├── conversation.js      Gestion des salons publics
+├── contact.js           Gestion des conversations privées
+├── parametre.js         Gestion des paramètres utilisateur
+│
+└── README.md            Documentation du projet
 
 ## 5. Base de données
 
@@ -52,15 +52,15 @@ La base de données PostgreSQL comprend cinq tables principales.
 |---|---|
 | `channels` | Salons de discussion publics |
 | `messages` | Messages des salons publics |
-| `conversation_privee` | Conversations entre deux utilisateurs |
-| `messages_prives` | Messages échangés dans les conversations privées |
-| `profiles` | Profils publics associés aux comptes Supabase Auth |
+| `conversation_privee` | Conversations privée entre deux utilisateurs |
+| `messages_prives` | Messages des conversations privées |
+| `profiles` | Profils publics des utilisateurs associés aux comptes Supabase Auth |
 
 Les tables sont reliées par des clés étrangères.
 
-Des politiques de sécurité **Row Level Security (RLS)** limitent l'accès aux données selon l'authentification et les droits des utilisateurs.
-
 Les conversations privées ne peuvent être consultées que par leurs participants.
+
+La supression d'un compte supprime tout les messages de ce contact. 
 
 ## 6. Fonctionnement général
 
@@ -68,7 +68,7 @@ Lors de l'inscription, Supabase Auth crée un compte utilisateur. Un déclencheu
 
 Après connexion, l'utilisateur peut accéder aux salons publics ou à la messagerie privée.
 
-Dans les salons publics, les messages sont enregistrés dans PostgreSQL et les nouveaux messages peuvent être reçus en temps réel.
+Dans les salons publics, les messages sont enregistrés dans PostgreSQL et les nouveaux messages peuvent être reçus en temps réel (le realtime doit être implanté).
 
 Dans la messagerie privée, l'application recherche une conversation existante entre les deux utilisateurs. Si aucune conversation n'existe, elle est créée lors du premier envoi. Les messages sont ensuite enregistrés dans la base de données et peuvent être récupérés lors de l'ouverture de la discussion.
 
@@ -92,21 +92,8 @@ Dans la messagerie privée, l'application recherche une conversation existante e
 
 Les développements envisagés comprennent :
 
-- Intégration de Supabase Realtime à la messagerie privée.
-- Gestion des envois simultanés et des changements rapides de conversation.
-- Amélioration de l'interface utilisateur.
-- Gestion plus complète de la suppression des comptes.
-- Ajout et développement de la section Défis.
+- Intégration de Supabase Realtime à la messagerie privée;
+- Intégration de la fonction de suppression de compte par l'utilisateur, Veuillez contacter le dépositaire de ce projet pour supression d'un compte. 
+- Intégration de la fonction 'mot de passe oublié';
+- Amélioration de l'interface utilisateur et de sa programmation CSS pour la page index et inscription.
 
-## 9. Références techniques
-
-- [MDN — Documentation Web](https://developer.mozilla.org/fr/)
-- [Supabase — Documentation officielle](https://supabase.com/docs)
-- [Supabase — Authentification](https://supabase.com/docs/guides/auth)
-- [Supabase — Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)
-
-## 10. Contexte académique
-
-Projet réalisé dans le cadre du cours **8WEB101 — Développement Web**, à l'Université du Québec à Chicoutimi.
-
-**Statut :** projet universitaire en développement.
