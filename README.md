@@ -46,7 +46,7 @@ Le projet vise à mettre en pratique les concepts de développement Web, la prog
 
 ## 5. Base de données
 
-La base de données PostgreSQL comprend cinq tables principales.
+La base de données  comprend cinq tables principales.
 
 | Table | Description |
 |---|---|
@@ -60,7 +60,7 @@ Les tables sont reliées par des clés étrangères.
 
 Les conversations privées ne peuvent être consultées que par leurs participants.
 
-La supression d'un compte supprime tout les messages de ce contact. 
+La supression d'un compte supprime tout les messages de ce contact. En résultat, les conversations privées se supprime et les messages dans les salons de cet utilisateurs sont supprimés. 
 
 ## 6. Fonctionnement général
 
@@ -90,10 +90,12 @@ Dans la messagerie privée, l'application recherche une conversation existante e
 
 ## 8. Fonctionnalités à améliorer
 
-Les développements envisagés comprennent :
+Les fonctionnalités à développer pour améliorer l'expérience utilisateur sont :
 
-- Intégration de Supabase Realtime à la messagerie privée;
 - Intégration de la fonction de suppression de compte par l'utilisateur, Veuillez contacter le dépositaire de ce projet pour supression d'un compte. 
 - Intégration de la fonction 'mot de passe oublié';
+- Retour sur la page connexion lors de l'inscription;
+- Inscrire le nom d'utilisateur de l'expéditeur sur les messages écrits dans le salon ainsi que l'heure d'envoi
 - Amélioration de l'interface utilisateur et de sa programmation CSS pour la page index et inscription.
+- 
 

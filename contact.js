@@ -26,12 +26,12 @@ let seDesabonnerMessagesPrives = null;
 //Créer une bulle de message privé
 function afficherMessagePrive(message, monId) {
     const bulle = document.createElement("p");
-
     bulle.textContent = message.content;
 
     if (message.expediteur_id === monId) {
         bulle.classList.add("bulle-message-envoye");
-    } else {
+    } 
+    else {
         bulle.classList.add("bulle-message-recu");
     }
 
@@ -50,9 +50,6 @@ async function chargerContacts() {
     }
 
     const { data: profils, error } = await Data.fetchProfiles(); // Récupérer tous les profils d'utilisateurs
-
-    console.log("Profils récupérés :", profils);
-    console.log("Erreur Supabase :", error);
 
     if (error) {
         console.error("Erreur de chargement des contacts :", error);
@@ -87,8 +84,7 @@ async function chargerContacts() {
             discussion.replaceChildren();
 
             // Chercher la conversation existante
-            const { data: conversation, error: erreurConversation } =
-                await Data.fetchPrivateConversation(user.id, profil.id);
+            const { data: conversation, error: erreurConversation } =await Data.fetchPrivateConversation(user.id, profil.id);
 
             if (erreurConversation) {
                 console.error("Erreur de recherche :", erreurConversation);
@@ -101,8 +97,7 @@ async function chargerContacts() {
             }
 
             // Récupérer les messages de la conversation
-            const { data: messages, error: erreurMessages } =
-                await Data.fetchPrivateMessages(conversation.id);
+            const { data: messages, error: erreurMessages } = await Data.fetchPrivateMessages(conversation.id);
 
             if (erreurMessages) {
                 console.error("Erreur de chargement :", erreurMessages);
@@ -119,15 +114,13 @@ async function chargerContacts() {
 
             for (const message of messages) {
                 afficherMessagePrive(message, user.id);
-        }
+            }
 
-        console.log("Historique chargé :", messages.length, "messages");
+            console.log("Historique chargé :", messages.length, "messages");
 
 
-        // Écouter les nouveaux messages de la conversation sélectionnée
-        seDesabonnerMessagesPrives = Data.subscribeToPrivateMessages(
-            conversation.id,
-            function(nouveauMessage) {
+            // Écouter les nouveaux messages de la conversation sélectionnée
+            seDesabonnerMessagesPrives = Data.subscribeToPrivateMessages(conversation.id,function(nouveauMessage) {
 
                 // Ne pas afficher les messages d'une autre conversation
                 if (contactSelectionneID !== profil.id) {
@@ -142,20 +135,20 @@ async function chargerContacts() {
                 // Afficher automatiquement le message reçu
                 afficherMessagePrive(nouveauMessage, user.id);
             }
-        );
-    });
+            );
+        });
 
-    //Ajouter le bouton dans la liste HTML
-    const elementListe = document.createElement("li");
-    elementListe.appendChild(bouton);
-    listeContacts.appendChild(elementListe);
+        //Ajouter le bouton dans la liste HTML
+        const elementListe = document.createElement("li");
+        elementListe.appendChild(bouton);
+        listeContacts.appendChild(elementListe);
     }
 
-        if (listeContacts.children.length === 0) {
-        const message = document.createElement("p");
-        message.textContent = "Aucun contact disponible";
-        listeContacts.appendChild(message);
-        }
+    if (listeContacts.children.length === 0) {
+    const message = document.createElement("p");
+    message.textContent = "Aucun contact disponible";
+    listeContacts.appendChild(message);
+    }
 }
 
 chargerContacts();
@@ -242,8 +235,6 @@ envoyerMessageButton.addEventListener("click", async function() {
     discussion.scrollTop = discussion.scrollHeight;
 
     messageInput.value = "";
-
-    console.log("Message privé enregistré dans Supabase !");
 });
 
 //Deconnexion d'un utilisateur et retour à la page de connexion
