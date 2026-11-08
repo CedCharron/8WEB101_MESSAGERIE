@@ -19,7 +19,9 @@ const discussion = document.querySelector("#discussion");
 const boutonDeconnexion = document.querySelector("#bouton-deconnexion");
 
 //Aucun contact sélectionné au chargement de la page
-let contactSelectionneID = null; // Variable pour stocker le contact sélectionné
+let contactSelectionneID = null;
+// Conserver la fonction de désabonnement Realtime
+let seDesabonnerMessagesPrives = null;
 
 //Créer une bulle de message privé
 function afficherMessagePrive(message, monId) {
@@ -75,10 +77,16 @@ async function chargerContacts() {
         bouton.addEventListener("click", async () => {
             contactSelectionneID = profil.id;
 
+            // Arrêter l'écoute de la conversation précédente
+            if (seDesabonnerMessagesPrives !== null) {
+                seDesabonnerMessagesPrives();
+                seDesabonnerMessagesPrives = null;
+            }
+
             titre.textContent = "Discussion avec " + profil.username;
             discussion.replaceChildren();
 
-            // 1. Chercher la conversation existante
+            // Chercher la conversation existante
             const { data: conversation, error: erreurConversation } =
                 await Data.fetchPrivateConversation(user.id, profil.id);
 
@@ -92,7 +100,7 @@ async function chargerContacts() {
                 return;
             }
 
-            // 2. Récupérer les messages de la conversation
+            // Récupérer les messages de la conversation
             const { data: messages, error: erreurMessages } =
                 await Data.fetchPrivateMessages(conversation.id);
 
@@ -106,7 +114,7 @@ async function chargerContacts() {
                 return;
             }
 
-            // 3. Afficher chaque message
+            // Afficher chaque message
             discussion.replaceChildren();
 
             for (const message of messages) {
@@ -114,6 +122,27 @@ async function chargerContacts() {
         }
 
         console.log("Historique chargé :", messages.length, "messages");
+
+
+        // Écouter les nouveaux messages de la conversation sélectionnée
+        seDesabonnerMessagesPrives = Data.subscribeToPrivateMessages(
+            conversation.id,
+            function(nouveauMessage) {
+
+                // Ne pas afficher les messages d'une autre conversation
+                if (contactSelectionneID !== profil.id) {
+                    return;
+                }
+
+                // Les messages envoyés sont déjà affichés par notre bouton Envoyer
+                if (nouveauMessage.expediteur_id === user.id) {
+                    return;
+                }
+
+                // Afficher automatiquement le message reçu
+                afficherMessagePrive(nouveauMessage, user.id);
+            }
+        );
     });
 
     //Ajouter le bouton dans la liste HTML

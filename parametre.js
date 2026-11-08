@@ -3,7 +3,8 @@
 const nomUtilisateur = document.querySelector("#nom-utilisateur");
 const courrielUtilisateur = document.querySelector("#courriel-utilisateur");
 const boutonDeconnexion = document.querySelector("#bouton-deconnexion");
-const boutonSupressionCompte=document.querySelector("#bouton-suppression-compte")
+const boutonSupressionCompte= document.querySelector("#bouton-suppression-compte")
+const confirmationSuppression = document.querySelector("#confirmation-suppression");
 
 // Afficher les informations du compte connecté
 async function chargerParametres() {
@@ -33,9 +34,9 @@ boutonDeconnexion.addEventListener("click", async () => {
     window.location.href = "index.html";
 });
 
+
 //Suppression du compte 
 boutonSupressionCompte.addEventListener("click", function(){
     alert("Envoyez un message a l'administrateur du site pour faire supprimer votre compte.");
 })
-
 chargerParametres();

@@ -112,5 +112,26 @@ const Data={
         .eq("conversation_id", conversationId)
         .order("created_at", { ascending: true });
     },
+
+    // Écouter les nouveaux messages d'une conversation privée
+    subscribeToPrivateMessages(conversationId, onNewMessage) {
+        const subscription = supabaseClient
+            .channel("private-messages-" + conversationId)
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "messages_prives",
+                    filter: "conversation_id=eq." + conversationId
+                },
+                (payload) => onNewMessage(payload.new)
+            )
+            .subscribe((status) => {
+                console.log("Realtime privé :", status);
+            });
+
+        return () => supabaseClient.removeChannel(subscription);
+    },
 };
 
